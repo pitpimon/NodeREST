@@ -1,0 +1,14 @@
+<!-- book.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Book</title>
+</head>
+<body>
+  <h1>{{ book.title }}</h1>
+  <p>Author: {{ book.author }}</p>
+  <a href="{{ url_for('update', id=book.id) }}">Edit</a>
+  <a href="{{ url_for('delete', id=book.id) }}">Delete</a>
+  <a href="{{ url_for('books') }}">Back to List</a>
+</body>
+</html>

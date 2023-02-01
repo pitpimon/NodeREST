@@ -1,0 +1,29 @@
+<!-- books.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Books</title>
+</head>
+<body>
+  <h1>Books</h1>
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Actions</th>
+    </tr>
+    {% for book in books %}
+    <tr>
+      <td>{{ book.title }}</td>
+      <td>{{ book.author }}</td>
+      <td>
+        <a href="{{ url_for('book', id=book.id) }}">View</a>
+        <a href="{{ url_for('update', id=book.id) }}">Edit</a>
+        <a href="{{ url_for('delete', id=book.id) }}">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  <a href="{{ url_for('create') }}">Create New Book</a>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!-- update.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Update Book</title>
+</head>
+<body>
+  <h1>Update Book</h1>
+  <form method="post">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" value="{{ book.title }}">
+    <br>
+    <label for="author">Author:</label>
+    <input type="text" id="author" name="author" value="{{ book.author }}">
+    <br>
+    <input type="submit" value="Update">
+    
+  </form>
+<a href="{{ url_for('book', id=book.id) }}">View</a>
+<a href="{{ url_for('delete', id=book.id) }}">Delete</a>
+<a href="{{ url_for('books') }}">Back to List</a>
+</body>
+</html>
