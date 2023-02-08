@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "format": "prettier --write *.js",
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "format": "prettier --write src/*.js",
+    "start": "node src/CRUDBookNoDB.js",
+    "dev": "nodemon src/CRUDBookNoDB.js"
   },
   "repository": {
     "type": "git",
