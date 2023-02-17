@@ -1,5 +1,4 @@
 // Description: Node Express REST API with Sequelize and SQLite CRUD Book
-// Date: 03/29/2020
 // npm install express sequelize sqlite3
 // Run this file with node SequlizeSQLiteCRUDBook.js
 // Test with Postman
