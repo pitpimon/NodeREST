@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "format": "prettier --write src/*.js",
-    "start": "node src/index.js",
+    "start": "node src/CRUDBookSQLite.js",
     "dev": "nodemon src/index.js"
   },
   "repository": {
