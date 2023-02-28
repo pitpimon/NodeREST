@@ -14,7 +14,7 @@ app.use(express.json());
 const sequelize = new Sequelize('database', 'username', 'password', {
   host: 'localhost',
   dialect: 'sqlite',
-  storage: './Database/Book.sqlite'
+  storage: './Database/SQBooks.sqlite'
 });
 
 // define the Book model
@@ -105,3 +105,4 @@ app.delete('/books/:id', (req, res) => {
 // start the server
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
+
