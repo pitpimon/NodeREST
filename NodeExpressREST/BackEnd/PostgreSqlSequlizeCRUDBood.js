@@ -1,25 +1,21 @@
-// Description: Node Express REST API with PostgreSql and Sequlize CRUD Book
-// Date: 03/29/2020
-// npm install express sequelize pg
-// Run this file with node PostgreSqlSequlizeCRUDBood.js
-// Test with Postman
-
-
 const express = require('express');
 const Sequelize = require('sequelize');
 const app = express();
-
 // parse incoming requests
 app.use(express.json());
 
-// create a connection to the database
-const sequelize = new Sequelize('database', 'username', 'password', {
-  host: 'localhost',
-  dialect: 'postgres'
-});
+// set db url
+const dbUrl = 'postgres://webadmin:MAIgsf81141@node40729-noderest.proen.app.ruk-com.cloud:11478/Books'
 
+// create a connection to the database
+const sequelize = new Sequelize(dbUrl);
 // define the Book model
 const Book = sequelize.define('book', {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
   title: {
     type: Sequelize.STRING,
     allowNull: false
@@ -87,16 +83,17 @@ app.delete('/books/:id', (req, res) => {
     if (!book) {
       res.status(404).send('Book not found');
     } else {
-            book.destroy().then(() => {
-            res.send({});
-            }).catch(err => {
-            res.status(500).send(err);
-         });
+      book.destroy().then(() => {
+        res.send({});
+      }).catch(err => {
+        res.status(500).send(err);
+      });
     }
-}).catch(err => {
-  res.status(500).send(err);
-});
+  }).catch(err => {
+    res.status(500).send(err);
+  });
 });
 
+// start the server
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
