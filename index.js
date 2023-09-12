@@ -1,108 +1,87 @@
-// Description: Node Express REST API with Sequelize and SQLite CRUD Book
-// npm install express sequelize sqlite3
-// Run this file with node SequlizeSQLiteCRUDBook.js
+// SQLite3 CRUD operations
+// npm install sqlite3
+// Create a Bood.sqlite file in Database folder
+// Run this file with node CRUDBookSQLite.js
 // Test with Postman
 
 const express = require('express');
-const Sequelize = require('sequelize');
+const sqlite3 = require('sqlite3');
 const app = express();
+
+// connect to database
+const db = new sqlite3.Database('./Database/Books.sqlite');
 
 // parse incoming requests
 app.use(express.json());
 
-// create a connection to the database
-const sequelize = new Sequelize('database', 'username', 'password', {
-  host: 'localhost',
-  dialect: 'sqlite',
-  storage: './Database/SQBooks.sqlite'
-});
-
-// define the Book model
-const Book = sequelize.define('book', {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  },
-  title: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  author: {
-    type: Sequelize.STRING,
-    allowNull: false
-  }
-});
-
-// create the books table if it doesn't exist
-sequelize.sync();
+// create books table if it doesn't exist
+db.run(`CREATE TABLE IF NOT EXISTS books (
+  id INTEGER PRIMARY KEY,
+  title TEXT,
+  author TEXT
+)`);
 
 // route to get all books
 app.get('/books', (req, res) => {
-  Book.findAll().then(books => {
-    res.json(books);
-  }).catch(err => {
-    res.status(500).send(err);
+  db.all('SELECT * FROM books', (err, rows) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.json(rows);
+    }
   });
 });
 
 // route to get a book by id
 app.get('/books/:id', (req, res) => {
-  Book.findByPk(req.params.id).then(book => {
-    if (!book) {
-      res.status(404).send('Book not found');
+  db.get('SELECT * FROM books WHERE id = ?', req.params.id, (err, row) => {
+    if (err) {
+      res.status(500).send(err);
     } else {
-      res.json(book);
+      if (!row) {
+        res.status(404).send('Book not found');
+      } else {
+        res.json(row);
+      }
     }
-  }).catch(err => {
-    res.status(500).send(err);
   });
 });
 
 // route to create a new book
 app.post('/books', (req, res) => {
-  Book.create(req.body).then(book => {
-    res.send(book);
-  }).catch(err => {
-    res.status(500).send(err);
+  const book = req.body;
+  db.run('INSERT INTO books (title, author) VALUES (?, ?)', book.title, book.author, function(err) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      book.id = this.lastID;
+      res.send(book);
+    }
   });
 });
 
 // route to update a book
 app.put('/books/:id', (req, res) => {
-  Book.findByPk(req.params.id).then(book => {
-    if (!book) {
-      res.status(404).send('Book not found');
+  const book = req.body;
+  db.run('UPDATE books SET title = ?, author = ? WHERE id = ?', book.title, book.author, req.params.id, function(err) {
+    if (err) {
+      res.status(500).send(err);
     } else {
-      book.update(req.body).then(() => {
-        res.send(book);
-      }).catch(err => {
-        res.status(500).send(err);
-      });
+      res.send(book);
     }
-  }).catch(err => {
-    res.status(500).send(err);
   });
 });
 
 // route to delete a book
 app.delete('/books/:id', (req, res) => {
-  Book.findByPk(req.params.id).then(book => {
-    if (!book) {
-      res.status(404).send('Book not found');
+  db.run('DELETE FROM books WHERE id = ?', req.params.id, function(err) {
+    if (err) {
+      res.status(500).send(err);
     } else {
-      book.destroy().then(() => {
-        res.send({});
-      }).catch(err => {
-        res.status(500).send(err);
-        });
+      res.send({});
     }
-}).catch(err => {
-  res.status(500).send(err);
-});
+  });
 });
 
-// start the server
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
-
