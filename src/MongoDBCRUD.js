@@ -17,7 +17,11 @@ mongoose.connect(
 );
 
 const Book = mongoose.model("Book", {
-  id: Number,
+  id: {
+    type: Number,
+    unique: true, // Ensures uniqueness of the "id" field
+    required: true, // If you want "id" to be required
+  },
   title: String,
   author: String,
 });
@@ -28,8 +32,16 @@ app.use(bodyParser.json());
 // Create
 app.post("/books", async (req, res) => {
   try {
-    const book = new Book(req.body);
-    book.id = (await Book.countDocuments()) + 1;
+    // Get the last book record to determine the next ID
+    const lastBook = await Book.findOne().sort({ id: -1 });
+    const nextId = lastBook ? lastBook.id + 1 : 1;
+
+    // Create a new book with the next ID
+    const book = new Book({
+      id: nextId, // Set the custom "id" field
+      ...req.body, // Include other book data from the request body
+    });
+
     await book.save();
     res.send(book);
   } catch (error) {
@@ -50,7 +62,7 @@ app.get("/books", async (req, res) => {
 // Read one
 app.get("/books/:id", async (req, res) => {
   try {
-    const book = await Book.findOne(req.params.id);
+    const book = await Book.findOne({id:req.params.id});
     res.send(book);
   } catch (error) {
     res.status(500).send(error);
@@ -60,7 +72,7 @@ app.get("/books/:id", async (req, res) => {
 // Update
 app.put("/books/:id", async (req, res) => {
   try {
-    const book = await Book.findOneAndUpdate(req.params.id, req.body, {
+    const book = await Book.findOneAndUpdate({id:req.params.id}, req.body, {
       new: true,
     });
     res.send(book);
@@ -72,7 +84,7 @@ app.put("/books/:id", async (req, res) => {
 // Delete
 app.delete("/books/:id", async (req, res) => {
   try {
-    const book = await Book.findOneAndDelete(req.params.id);
+    const book = await Book.findOneAndDelete({id:req.params.id});
     res.send(book);
   } catch (error) {
     res.status(500).send(error);
