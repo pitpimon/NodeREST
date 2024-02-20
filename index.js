@@ -18,7 +18,7 @@ app.use(express.json());
 //});
 
 // set db url
-const dbUrl = 'postgres://webadmin:ASIeey56113@node58830-env-pitpimon.proen.app.ruk-com.cloud:11767/Books'
+const dbUrl = 'postgres://webadmin:ASIeey56113@node58830-env-pitpimon.proen.app.ruk-com.cloud/Books'
 
 // Create a connection to the database
 const sequelize = new Sequelize(dbUrl);
