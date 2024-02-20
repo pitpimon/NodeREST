@@ -11,11 +11,17 @@ const app = express();
 app.use(express.json());
 
 // create a connection to the database
-const sequelize = new Sequelize('database', 'username', 'password', {
-  host: 'localhost',
-  dialect: 'sqlite',
-  storage: './Database/SQBooks.sqlite'
-});
+//const sequelize = new Sequelize('database', 'username', 'password', {
+//  host: 'localhost',
+//  dialect: 'sqlite',
+//  storage: './Database/SQBooks.sqlite'
+//});
+
+// set db url
+const dbUrl = 'postgres://webadmin:ASIeey56113@node58830-env-pitpimon.proen.app.ruk-com.cloud:11767/Books'
+
+// Create a connection to the database
+const sequelize = new Sequelize(dbUrl);
 
 // define the Book model
 const Book = sequelize.define('book', {
