@@ -4,8 +4,15 @@ const app = express();
 // parse incoming requests
 app.use(express.json());
 
+// create a connection to the database
+//const sequelize = new Sequelize('database', 'username', 'password', {
+//  host: 'localhost',
+//  dialect: 'sqlite',
+//  storage: './Database/SQBooks.sqlite'
+//});
+
 // set db url
-const dbUrl = 'postgres://webadmin:CFGclc11613@node58830-env-pitpimon.proen.app.ruk-com.cloud/Books'
+const dbUrl = 'postgres://webadmin:CFGclc11613@node58830-env-pitpimon.proen.app.ruk-com.cloud:11767/Books'
 
 // create a connection to the database
 const sequelize = new Sequelize(dbUrl);
